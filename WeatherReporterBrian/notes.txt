@@ -1,0 +1,5 @@
+Lab link:
+http://www.cs.tufts.edu/comp/120/assignments/lab01.php
+
+Ming's twitter hint:
+February 03, 2011 11:47:48 PM EST - To submit Lab 1, you can compress the entire project into a ZIP OR submit just the WeatherReporter.java file
