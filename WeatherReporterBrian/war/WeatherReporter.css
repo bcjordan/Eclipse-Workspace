@@ -1,0 +1,30 @@
+h1 {
+	font-size: 2em;
+	font-weight: bold;
+	color: #777777;
+	margin: 40px 0px 70px;
+}
+
+.weather-input-panel {
+	background-color: #AACCFF;
+	border: 2px solid #3366CC;
+	font-weight: bold;
+}
+
+/* Apply padding to every element within the input panel */
+.weather-input-panel * {
+	padding: 3px;
+}
+
+/* Override default style */
+.gwt-Button {
+	background-color: #3366CC;
+	color: blue;
+	font-weight: bold;
+	border: 1px solid #AACCFF;
+}
+
+.gwt-Button:hover {
+	background-color: #FF0084;
+	color: green;
+}

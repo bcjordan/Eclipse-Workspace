@@ -1,0 +1,26 @@
+what,kind,bundleId,bundleVersion,description,time
+executed,command,org.eclipse.ui,3.6.1.M20100826-1330,"org.eclipse.ui.file.close",1296692680665
+activated,view,org.eclipse.ui.navigator.resources,3.4.201.M20100707-0800,"org.eclipse.ui.navigator.ProjectExplorer",1296692681692
+closed,editor,org.eclipse.wst.xml.ui,1.1.102.v201008251905,"org.eclipse.wst.xml.ui.internal.tabletree.XMLMultiPageEditorPart",1296692681692
+executed,command,org.eclipse.ui,3.6.1.M20100826-1330,"org.eclipse.ui.file.close",1296692681699
+activated,view,org.eclipse.ui.console,3.5.0.v20100526,"org.eclipse.ui.console.ConsoleView",1296692684969
+activated,view,com.google.gwt.eclipse.oophm,1.4.2.v201012211742,"com.google.gwt.eclipse.DevModeView",1296692689200
+activated,view,org.eclipse.ui.navigator.resources,3.4.201.M20100707-0800,"org.eclipse.ui.navigator.ProjectExplorer",1296692693326
+deactivated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296692710995
+started,bundle,com.google.gdt.eclipse.platform,1.4.2.v201012211742,"com.google.gdt.eclipse.platform",1296692715922
+activated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296692930695
+error,log,,,"Unhandled event loop exception",1296692930729
+deactivated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296692932634
+activated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296692935356
+deactivated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296692936499
+activated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296692938623
+activated,view,org.eclipse.ui.console,3.5.0.v20100526,"org.eclipse.ui.console.ConsoleView",1296692941096
+deactivated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296692941937
+activated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296738494059
+activated,view,org.eclipse.ui.navigator.resources,3.4.201.M20100707-0800,"org.eclipse.ui.navigator.ProjectExplorer",1296738505448
+deactivated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296759903792
+activated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296759904788
+deactivated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296759904964
+activated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296862710494
+executed,command,org.eclipse.ui,3.6.1.M20100826-1330,"org.eclipse.ui.edit.copy",1296862719242
+deactivated,workbench,org.eclipse.ui.workbench,3.6.1.M20100826-1330,"",1296862722265
