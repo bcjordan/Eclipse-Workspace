@@ -1,5 +1,9 @@
 Lab link:
 http://www.cs.tufts.edu/comp/120/assignments/lab01.php
 
+Text:
+TODO: Add a new widget in the Weather Reporter GWT application that lists all the legitimate zipcodes queried during a session. That is, if you perform a series of queries and then close your web browser, the widget is empty.
+
+
 Ming's twitter hint:
 February 03, 2011 11:47:48 PM EST - To submit Lab 1, you can compress the entire project into a ZIP OR submit just the WeatherReporter.java file

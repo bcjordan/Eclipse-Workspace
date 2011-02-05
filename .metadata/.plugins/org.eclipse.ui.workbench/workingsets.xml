@@ -4,6 +4,11 @@
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/TwitterStalk" type="4"/>
 <item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/WeatherReporter" type="4"/>
 </workingSet>
-<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1296862762708_1" label="Window Working Set" name="Aggregate for window 1296862762708"/>
+<workingSet editPageId="org.eclipse.mylyn.tasks.ui.workingSet" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1296863496760_2" label="COMP120work" name="COMP120work">
+<item factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/WeatherReporterBrian" type="4"/>
+</workingSet>
+<workingSet aggregate="true" factoryID="org.eclipse.ui.internal.WorkingSetFactory" id="1296862762708_1" label="Window Working Set" name="Aggregate for window 1296862762708">
+<workingSet IMemento.internal.id="COMP120work"/>
+</workingSet>
 <mruList name="COMP120"/>
 </workingSetManager>

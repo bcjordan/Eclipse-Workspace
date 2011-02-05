@@ -1,5 +1,7 @@
 package com.example.weatherreporter.client;
 
+import java.util.LinkedList;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
@@ -15,10 +17,15 @@ public class WeatherReporter implements EntryPoint
 	private RadioButton ufRadio;
 	private Button submit;
 	private HTML weatherHTML;
+	private HTML logHTML;
 	private final WeatherServiceAsync ws = GWT.create(WeatherService.class); // Making the RPC
 
 	public void onModuleLoad()
 	{
+		logHTML = new HTML();
+		logHTML.setHTML("<h3>Last zipcodes</h3>");
+		RootPanel.get("output").add(logHTML);
+		
 		inputPanel = new HorizontalPanel();
 		inputPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
 		inputPanel.setStyleName("weather-input-panel"); // See CSS under "war" folder
@@ -92,6 +99,7 @@ public class WeatherReporter implements EntryPoint
 		else {		
 			// Get choice of celsius / fahrenheit
 			boolean celsius = ucRadio.getValue();
+			logHTML.setHTML(logHTML.getHTML().concat(zip).concat("<br/>"));
 			fetchWeatherHtml(zip, celsius);
 		}
 	}
