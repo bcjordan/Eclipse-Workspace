@@ -1,7 +1,5 @@
 package com.example.weatherreporter.client;
 
-import java.util.LinkedList;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.*;
