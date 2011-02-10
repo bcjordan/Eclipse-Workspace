@@ -1,4 +1,0 @@
-INDEX VERSION 1.126+/Users/brian/code/Eclipse-Space/.metadata/.plugins/org.eclipse.jdt.core
-1974463225.index
-3360126635.index
-2232331388.index
