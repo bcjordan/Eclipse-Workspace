@@ -18,6 +18,7 @@ import com.google.gwt.language.client.translation.Language;
 import com.google.gwt.language.client.translation.Translation;
 import com.google.gwt.language.client.translation.TranslationCallback;
 import com.google.gwt.language.client.translation.TranslationResult;
+import com.google.gwt.language.client.transliteration.LanguageCode;
 // Import classes for string manipulation
 import java.util.StringTokenizer;
 //import java.util.regex.Pattern;
@@ -26,6 +27,10 @@ import java.util.StringTokenizer;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
+	private String pronunciation;
+	private String detectedLanguage;
+	private final GreetingServiceAsync ws = GWT.create(GreetingService.class); // Make the RPC
+	
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -73,10 +78,10 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 				Translation.detect(transArea.getText(), new LangDetCallback() {
 					@Override
 					protected void onCallback(LangDetResult result) {
-						detectionHTML.setHTML("Detected language: " + result.getLanguage());
+						detectedLanguage = result.getLanguage();
+						detectionHTML.setHTML("Detected language: " + detectedLanguage);
 					}
 				});
-				
 				Translation.translate(transArea.getText().replaceAll("\n", "\\("), Language.FRENCH,
 						Language.ENGLISH, new TranslationCallback() {
 
@@ -92,10 +97,13 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 							String vocabList = "";
 							
 							for(int i = 0; i < terms.length; i++) {
-								vocabList = vocabList.concat(terms[i]).concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+								vocabList = vocabList.concat(terms[i]).concat(" - ");
 								if(termsTranslated.length > i) vocabList = vocabList.concat(termsTranslated[i]);
 								vocabList = vocabList.concat("<br>");
 							}
+							
+							fetchPronunciationHTML(terms[0], detectedLanguage);
+							if (pronunciation != null) vocabList = vocabList.concat(pronunciation);
 							
 							cardsHTML.setHTML(vocabList);
 						}
@@ -116,5 +124,24 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 		main.add(left);
 		main.add(right);
 		return main;
+	}
+	
+	private void fetchPronunciationHTML(String word, String languageCode) {
+		ws.getPronunciationHTML(word, languageCode, new AsyncCallback<String>() {
+			@Override
+			public void onFailure(Throwable caught)
+			{
+				// TODO: Update some sort of error box
+			}
+			
+			@Override
+			public void onSuccess(String result)
+			{
+				String html = result;
+				System.out.println("Yo, we got an " + result);
+				pronunciation = html;
+			}
+			
+		});
 	}
 }

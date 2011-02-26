@@ -1,0 +1,6 @@
+* table-ize vocab list
+* have pronunciation download button, populate table.
+* write stylesheet
+* make nice title
+* make About page
+* deploy to appspot

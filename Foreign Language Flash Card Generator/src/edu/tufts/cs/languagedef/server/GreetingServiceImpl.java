@@ -4,6 +4,21 @@ import edu.tufts.cs.languagedef.client.GreetingService;
 import edu.tufts.cs.languagedef.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import java.io.IOException;
+import java.io.InputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
 /**
  * The server side implementation of the RPC service.
  */
@@ -12,9 +27,52 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 		GreetingService {
 
 	// Full API request URL is 
-	private static final String forvoBaseURL = "http://apifree.forvo.com/key/1f50c1707786cef29751878786ffec51/format/xml/action/word-pronunciations/word/cat/language/";
-	private static final String apiKey = "/1f50c1707786cef29751878786ffec51";
-	
+	private static final String forvoBaseURL = "http://apifree.forvo.com/key/1f50c1707786cef29751878786ffec51/format/xml/action/word-pronunciations/word/";
+    private static final String middle = "/language/";
+	private static DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+    public String getPronunciationHTML(String word, String languageCode) {
+    	Document xml;
+    	String result = "";
+    	
+    	// We want to grab the pathmp3 from this query result
+    	try {
+    		xml = getAudioXMLDocument(word, languageCode);
+    		Element item = (Element)xml.getElementsByTagName("pathmp3").item(0);
+    		if (item != null) {
+    			result = "<a href=\"" + item.getFirstChild().getNodeValue() + "\">Audio</a>";
+    		} else {
+    			result = "No audio! TODO REMOVE";
+    		}
+    		
+    		return result;
+    	} catch (Exception e) { return e.toString(); }
+    }
+    
+    private Document getAudioXMLDocument (String word, String languageCode) {
+    	String url = forvoBaseURL + word + middle + languageCode;
+    	
+    	// Stolen from Ming Chow's WeatherService app
+		HttpClient client = new DefaultHttpClient();
+		HttpGet get = new HttpGet(url);
+		try {
+			HttpResponse response = client.execute(get);
+			HttpEntity entity = response.getEntity();
+			if (response.getStatusLine().getStatusCode() == 200) {
+				InputStream input = entity.getContent();
+				DocumentBuilder builder = builderFactory.newDocumentBuilder();
+				return builder.parse(input);
+			}
+			else {
+				throw new IOException("HTTP Communication problem, response code: " + response.getStatusLine());
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+		} finally {}
+    }
+
+    
 	public String greetServer(String input) throws IllegalArgumentException {
 		// Verify that the input is valid. 
 		if (!FieldVerifier.isValidName(input)) {
