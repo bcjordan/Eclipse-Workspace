@@ -11,7 +11,8 @@
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
 
   <!-- Other module inherits                                      -->
-
+  <!-- Inherit Google Translate toolkit                           -->
+  <inherits name='com.google.gwt.language.Language' />
   <!-- Specify the app entry point class.                         -->
   <entry-point class='edu.tufts.cs.languagedef.client.Foreign_Language_Flash_Card_Generator'/>
 

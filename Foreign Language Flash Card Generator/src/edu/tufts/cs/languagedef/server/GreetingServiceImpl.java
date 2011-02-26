@@ -11,6 +11,10 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 public class GreetingServiceImpl extends RemoteServiceServlet implements
 		GreetingService {
 
+	// Full API request URL is 
+	private static final String forvoBaseURL = "http://apifree.forvo.com/key/1f50c1707786cef29751878786ffec51/format/xml/action/word-pronunciations/word/cat/language/";
+	private static final String apiKey = "/1f50c1707786cef29751878786ffec51";
+	
 	public String greetServer(String input) throws IllegalArgumentException {
 		// Verify that the input is valid. 
 		if (!FieldVerifier.isValidName(input)) {

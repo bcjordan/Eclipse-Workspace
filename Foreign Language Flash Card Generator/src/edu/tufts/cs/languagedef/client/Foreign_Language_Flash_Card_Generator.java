@@ -9,13 +9,18 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.*;
+// Import classes for Google Translate
+import com.google.gwt.language.client.LanguageUtils;
+import com.google.gwt.language.client.translation.LangDetCallback;
+import com.google.gwt.language.client.translation.LangDetResult;
+import com.google.gwt.language.client.translation.Language;
+import com.google.gwt.language.client.translation.Translation;
+import com.google.gwt.language.client.translation.TranslationCallback;
+import com.google.gwt.language.client.translation.TranslationResult;
+// Import classes for string manipulation
+import java.util.StringTokenizer;
+//import java.util.regex.Pattern;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -26,127 +31,90 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 	 * returns an error.
 	 */
 	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
+		+ "attempting to contact the server. Please check your network "
+		+ "connection and try again.";
 
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting service.
 	 */
 	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
+	.create(GreetingService.class);
 
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		final Button sendButton = new Button("Send");
-		final TextBox nameField = new TextBox();
-		nameField.setText("GWT User");
-		final Label errorLabel = new Label();
+		// Loads the translation API
+		//
+		// It is not safe to make calls into the translation API until the run()
+		// method is invoked. Use LanguageUtils.loadTransliteration() for the
+		// transliteration API.
+		LanguageUtils.loadTranslation(new Runnable() {
+			public void run() {
+				RootPanel.get().add(new HTML("<h1>SimpleLanguage</h1><p>"));
+				RootPanel.get().add(createTranslationPanel());
+			}
+		});
+	}
 
-		// We can add style names to widgets
-		sendButton.addStyleName("sendButton");
+	// Creates translation panel.
+	private Panel createTranslationPanel() {
+		final TextArea transArea = new TextArea();
+		transArea.setPixelSize(200, 100);
 
-		// Add the nameField and sendButton to the RootPanel
-		// Use RootPanel.get() to get the entire body element
-		RootPanel.get("nameFieldContainer").add(nameField);
-		RootPanel.get("sendButtonContainer").add(sendButton);
-		RootPanel.get("errorLabelContainer").add(errorLabel);
+		// This is where translation results are put.
+		final HTML cardsHTML = new HTML();
+		final HTML detectionHTML = new HTML();
 
-		// Focus the cursor on the name field when the app loads
-		nameField.setFocus(true);
-		nameField.selectAll();
+		Button translateButton = new Button("Translate");
+		translateButton.addClickHandler(new ClickHandler() {
 
-		// Create the popup dialog box
-		final DialogBox dialogBox = new DialogBox();
-		dialogBox.setText("Remote Procedure Call");
-		dialogBox.setAnimationEnabled(true);
-		final Button closeButton = new Button("Close");
-		// We can set the id of a widget by accessing its Element
-		closeButton.getElement().setId("closeButton");
-		final Label textToServerLabel = new Label();
-		final HTML serverResponseLabel = new HTML();
-		VerticalPanel dialogVPanel = new VerticalPanel();
-		dialogVPanel.addStyleName("dialogVPanel");
-		dialogVPanel.add(new HTML("<b>Sending name to the server:</b>"));
-		dialogVPanel.add(textToServerLabel);
-		dialogVPanel.add(new HTML("<br><b>Server replies:</b>"));
-		dialogVPanel.add(serverResponseLabel);
-		dialogVPanel.setHorizontalAlignment(VerticalPanel.ALIGN_RIGHT);
-		dialogVPanel.add(closeButton);
-		dialogBox.setWidget(dialogVPanel);
-
-		// Add a handler to close the DialogBox
-		closeButton.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				dialogBox.hide();
-				sendButton.setEnabled(true);
-				sendButton.setFocus(true);
+				Translation.detect(transArea.getText(), new LangDetCallback() {
+					@Override
+					protected void onCallback(LangDetResult result) {
+						detectionHTML.setHTML("Detected language: " + result.getLanguage());
+					}
+				});
+				
+				Translation.translate(transArea.getText().replaceAll("\n", "\\("), Language.FRENCH,
+						Language.ENGLISH, new TranslationCallback() {
+
+					@Override
+					protected void onCallback(TranslationResult result) {
+						if (result.getError() != null) {
+							cardsHTML.setHTML(result.getError().getMessage());
+						} else {
+							String splitChar = "(";
+							String[] terms = transArea.getText().split("\n");
+							String[] termsTranslated = result.getTranslatedText().split("\\(");
+							
+							String vocabList = "";
+							
+							for(int i = 0; i < terms.length; i++) {
+								vocabList = vocabList.concat(terms[i]).concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+								if(termsTranslated.length > i) vocabList = vocabList.concat(termsTranslated[i]);
+								vocabList = vocabList.concat("<br>");
+							}
+							
+							cardsHTML.setHTML(vocabList);
+						}
+					}
+				});
 			}
 		});
 
-		// Create a handler for the sendButton and nameField
-		class MyHandler implements ClickHandler, KeyUpHandler {
-			/**
-			 * Fired when the user clicks on the sendButton.
-			 */
-			public void onClick(ClickEvent event) {
-				sendNameToServer();
-			}
-
-			/**
-			 * Fired when the user types in the nameField.
-			 */
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					sendNameToServer();
-				}
-			}
-
-			/**
-			 * Send the name from the nameField to the server and wait for a response.
-			 */
-			private void sendNameToServer() {
-				// First, we validate the input.
-				errorLabel.setText("");
-				String textToServer = nameField.getText();
-				if (!FieldVerifier.isValidName(textToServer)) {
-					errorLabel.setText("Please enter at least four characters");
-					return;
-				}
-
-				// Then, we send the input to the server.
-				sendButton.setEnabled(false);
-				textToServerLabel.setText(textToServer);
-				serverResponseLabel.setText("");
-				greetingService.greetServer(textToServer,
-						new AsyncCallback<String>() {
-							public void onFailure(Throwable caught) {
-								// Show the RPC error message to the user
-								dialogBox
-										.setText("Remote Procedure Call - Failure");
-								serverResponseLabel
-										.addStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(SERVER_ERROR);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
-
-							public void onSuccess(String result) {
-								dialogBox.setText("Remote Procedure Call");
-								serverResponseLabel
-										.removeStyleName("serverResponseLabelError");
-								serverResponseLabel.setHTML(result);
-								dialogBox.center();
-								closeButton.setFocus(true);
-							}
-						});
-			}
-		}
-
-		// Add a handler to send the name to the server
-		MyHandler handler = new MyHandler();
-		sendButton.addClickHandler(handler);
-		nameField.addKeyUpHandler(handler);
+		// Add all widgets to translation panel.
+		VerticalPanel left = new VerticalPanel();
+		VerticalPanel right = new VerticalPanel();
+		HorizontalPanel main = new HorizontalPanel();
+		left.add(transArea);
+		left.add(translateButton);
+		right.add(detectionHTML);
+		right.add(new Label("Translation result: "));
+		right.add(cardsHTML);
+		main.add(left);
+		main.add(right);
+		return main;
 	}
 }
