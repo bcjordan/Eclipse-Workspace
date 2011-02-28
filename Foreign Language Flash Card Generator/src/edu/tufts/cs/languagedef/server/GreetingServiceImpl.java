@@ -40,13 +40,14 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
     		xml = getAudioXMLDocument(word, languageCode);
     		Element item = (Element)xml.getElementsByTagName("pathmp3").item(0);
     		if (item != null) {
-    			result = "<a href=\"" + item.getFirstChild().getNodeValue() + "\">Audio</a>";
+    			result = "<audio controls preload=\"auto\" autobuffer size=\"2\"><source src=\"" + item.getFirstChild().getNodeValue() + "\" /></audio>";
+    			//result = "<a href=\"" + item.getFirstChild().getNodeValue() + "\">Audio</a>";
     		} else {
-    			result = "No audio! TODO REMOVE";
+    			result = "";
     		}
     		
     		return result;
-    	} catch (Exception e) { return e.toString(); }
+    	} catch (Exception e) { return ""; }
     }
     
     private Document getAudioXMLDocument (String word, String languageCode) {
