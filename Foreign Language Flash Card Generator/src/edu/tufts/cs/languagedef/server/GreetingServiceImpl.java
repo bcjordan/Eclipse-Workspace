@@ -63,22 +63,6 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
     		return null;
     	} finally {
     	}
-		/*
-		try {
-			HttpResponse response = client.execute(get);
-			HttpEntity entity = response.getEntity();
-			if (response.getStatusLine().getStatusCode() == 200) {
-				InputStream input = entity.getContent();
-				DocumentBuilder builder = builderFactory.newDocumentBuilder();
-				return builder.parse(input);
-			}
-			else {
-				throw new IOException("HTTP Communication problem, response code: " + response.getStatusLine());
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			return null;
-		} finally {}*/
     }
 
     
