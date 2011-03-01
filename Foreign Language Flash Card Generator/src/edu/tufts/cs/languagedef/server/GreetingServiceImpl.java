@@ -4,8 +4,12 @@ import edu.tufts.cs.languagedef.client.GreetingService;
 import edu.tufts.cs.languagedef.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -49,11 +53,17 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
     }
     
     private Document getAudioXMLDocument (String word, String languageCode) {
-    	String url = forvoBaseURL + word + middle + languageCode;
-    	
-    	// Stolen from Ming Chow's WeatherService app
-		HttpClient client = new DefaultHttpClient();
-		HttpGet get = new HttpGet(url);
+    	try {
+	    	URL url = new URL(forvoBaseURL + word + middle + languageCode);
+
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+			return builder.parse(url.openStream());
+    	} catch (Exception e) {
+			System.out.println("OI!" + e.getMessage() + "end");
+    		return null;
+    	} finally {
+    	}
+		/*
 		try {
 			HttpResponse response = client.execute(get);
 			HttpEntity entity = response.getEntity();
@@ -68,7 +78,7 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			return null;
-		} finally {}
+		} finally {}*/
     }
 
     

@@ -1,10 +1,15 @@
 table-ize vocab list
 have pronunciation download button, populate table.
-* write stylesheet
+write stylesheet
 auto-choose language
 	from "fr" to Language.FRENCH
-	LATER * fix pause
+	* fix pause
 make nice title
 make About page
-LATER * deploy to appspot
-*submit
+* deploy to appspot
+* email ming about:
+ 	    	URL url = new URL(forvoBaseURL + word + middle + languageCode);
+
+			DocumentBuilder builder = builderFactory.newDocumentBuilder();
+			return builder.parse(url.openStream());
+submit
