@@ -25,8 +25,6 @@ import com.google.gwt.layout.client.Layout.Alignment;
 // Import classes for string manipulation
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-//import java.util.regex.Pattern;
-// Import classes for GWT layout
 
 
 /**
@@ -34,7 +32,7 @@ import java.util.StringTokenizer;
  */
 public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 	private String[] pronunciation = new String[1];
-	private String detectedLanguage;
+	private String detectedLanguage = "fr";
 	private final GreetingServiceAsync ws = GWT.create(GreetingService.class); // Make the RPC
 	
 	/**
@@ -62,7 +60,7 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 		// transliteration API.
 		LanguageUtils.loadTranslation(new Runnable() {
 			public void run() {
-				RootPanel.get().add(new HTML("<h1>Vocab List Generator <font size=3><a href=\"about.html\">(wat?)</a></font></h1>"));
+				RootPanel.get().add(new HTML("<h1>Vocab List Generator <font size=3><a href=\"about.html\">(que?)</a></font></h1>"));
 				RootPanel.get().add(createTranslationPanel());
 			}
 		});
@@ -74,8 +72,7 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 		final TextArea transArea = new TextArea();
 		final Button pronunciationButton = new Button("Get Pronunciations");
 		transArea.setPixelSize(300, 100);
-
-		// This is where translation results are put.
+		transArea.setText("bonjour\nmonsieur\ncomment\nvas\ntu");
 		final HTML cardsHTML = new HTML();
 		final HTML detectionHTML = new HTML();
 
@@ -90,7 +87,10 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 						detectionHTML.setHTML("Detected language: " + detectedLanguage);
 					}
 				});
-				Translation.translate(transArea.getText().replaceAll("\n", "\\("), Language.FRENCH,
+				
+				// To perform the translation, we add a '(' character in place of each new line. This keeps our terms
+				// separate and forces Google Translate to consider them separately.
+				Translation.translate(transArea.getText().replaceAll("\n", "\\("), getLanguage(detectedLanguage),
 						Language.ENGLISH, new TranslationCallback() {
 
 					@Override
@@ -100,28 +100,38 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 						} else {
 							String splitChar = "(";
 							String[] terms = transArea.getText().split("\n");
+							// Remove and split on the '(' characters we sent to Google Translate as term separators.
 							String[] termsTranslated = result.getTranslatedText().split("\\(");
 							
 							String vocabList = "";
 							pronunciation = new String[terms.length];
+							transTable.clear(true);
 
 							for(int i = 0; i < terms.length; i++) {
+								
+								// Populate pronunciation table
 								transTable.setText(i, 0, terms[i]);
 								transTable.setText(i, 1, "  -  ");
-								//vocabList = vocabList.concat(terms[i]).concat(" - ");
+
 								if(termsTranslated.length > i) transTable.setText(i, 2, termsTranslated[i]);
+								
+								// Download pronunciation HTML tags in case user wants them later
 								fetchPronunciationHTML(terms[i], detectedLanguage, i);
-								// vocabList = vocabList.concat("<br>");
 							}
-							
-							//fetchPronunciationHTML(terms[0], detectedLanguage);
-							//if (pronunciation != null) vocabList = vocabList.concat(pronunciation);
-							
-							cardsHTML.setHTML(vocabList);
-							pronunciationButton.setVisible(true);
+
+							pronunciationButton.setVisible(true); // Activate pronunciation button
 						}
 					}
 				});
+			}
+
+			private Language getLanguage(String d) {
+				// TODO Auto-generated method stub
+				for (int i = 0; i < Language.values().length; i++) {
+					if(Language.values()[i].getLangCode().equalsIgnoreCase(d))
+							return Language.values()[i];
+				}
+				return null;
 			}
 		});
 		
@@ -138,7 +148,9 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 		// Add all widgets to translation panel.
 		VerticalPanel left = new VerticalPanel();
 		VerticalPanel right = new VerticalPanel();
+		// Depreciated, but can't find replacement.
 		HorizontalSplitPanel main = new HorizontalSplitPanel();
+		
 		left.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
 		main.setWidth("100%");
 		main.setStyleName("mainpanel");
@@ -147,10 +159,11 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 		buttons.add(translateButton);
 		buttons.add(pronunciationButton);
 		left.add(buttons);
+		
 		pronunciationButton.setVisible(false);
+		
 		right.add(detectionHTML);
 		right.add(new Label("Translation result: "));
-		// right.add(cardsHTML);
 		right.add(transTable);
 		main.setLeftWidget(left);
 		main.setRightWidget(right);

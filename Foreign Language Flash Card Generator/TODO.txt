@@ -1,6 +1,10 @@
-* table-ize vocab list
-* have pronunciation download button, populate table.
+table-ize vocab list
+have pronunciation download button, populate table.
 * write stylesheet
-* make nice title
-* make About page
-* deploy to appspot
+auto-choose language
+	from "fr" to Language.FRENCH
+	LATER * fix pause
+make nice title
+make About page
+LATER * deploy to appspot
+*submit

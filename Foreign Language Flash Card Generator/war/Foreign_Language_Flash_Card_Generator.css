@@ -1,6 +1,7 @@
 /** Add css rules here for your application. */
 	/** Example rules used by the template application (remove for your app) */
 	
+/** Add random background to webpage */
 html {
 	background-image: url(http://randomimage.heroku.com/random.jpg);
 }
@@ -13,6 +14,7 @@ h1 {
 	text-align: center;
 }
 
+/** Stylize submission button */
 .sendButton {
 	display: block;
 	font-size: 16pt;
@@ -22,6 +24,7 @@ h1 {
 	
 }
 
+/** Style split panel */
 .gwt-HorizontalSplitPanel .hsplitter {
 	cursor: move;
 	border: 0px;
@@ -29,6 +32,7 @@ h1 {
 	line-height: 0px;
 }
 
+/** Add table alignment */
 table {
 	margin-left: auto;
 	margin-right: auto;

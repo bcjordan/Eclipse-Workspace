@@ -26,7 +26,6 @@ import org.xml.sax.SAXException;
 public class GreetingServiceImpl extends RemoteServiceServlet implements
 		GreetingService {
 
-	// Full API request URL is 
 	private static final String forvoBaseURL = "http://apifree.forvo.com/key/1f50c1707786cef29751878786ffec51/format/xml/action/word-pronunciations/word/";
     private static final String middle = "/language/";
 	private static DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -35,13 +34,12 @@ public class GreetingServiceImpl extends RemoteServiceServlet implements
     	Document xml;
     	String result = "";
     	
-    	// We want to grab the pathmp3 from this query result
     	try {
     		xml = getAudioXMLDocument(word, languageCode);
     		Element item = (Element)xml.getElementsByTagName("pathmp3").item(0);
     		if (item != null) {
+    			// Add pronunciation audio HTML (using HTML5 audio tag)
     			result = "<audio controls preload=\"auto\" autobuffer size=\"2\"><source src=\"" + item.getFirstChild().getNodeValue() + "\" /></audio>";
-    			//result = "<a href=\"" + item.getFirstChild().getNodeValue() + "\">Audio</a>";
     		} else {
     			result = "";
     		}
