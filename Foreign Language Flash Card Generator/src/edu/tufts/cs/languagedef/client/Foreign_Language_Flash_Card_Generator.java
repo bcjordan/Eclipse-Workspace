@@ -1,16 +1,11 @@
 package edu.tufts.cs.languagedef.client;
 
-import edu.tufts.cs.languagedef.shared.FieldVerifier;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
 // Import classes for Google Translate
 import com.google.gwt.language.client.LanguageUtils;
 import com.google.gwt.language.client.translation.LangDetCallback;
@@ -19,13 +14,6 @@ import com.google.gwt.language.client.translation.Language;
 import com.google.gwt.language.client.translation.Translation;
 import com.google.gwt.language.client.translation.TranslationCallback;
 import com.google.gwt.language.client.translation.TranslationResult;
-import com.google.gwt.language.client.transliteration.LanguageCode;
-import com.google.gwt.layout.client.Layout.Alignment;
-
-// Import classes for string manipulation
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -33,6 +21,7 @@ import java.util.StringTokenizer;
 public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 	private String[] pronunciation = new String[1];
 	private String detectedLanguage = "fr";
+	final FlexTable transTable = new FlexTable();
 	private final GreetingServiceAsync ws = GWT.create(GreetingService.class); // Make the RPC
 	
 	/**
@@ -68,7 +57,6 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 
 	// Creates translation panel.
 	private Panel createTranslationPanel() {
-		final FlexTable transTable = new FlexTable();
 		final TextArea transArea = new TextArea();
 		final Button pronunciationButton = new Button("Get Pronunciations");
 		transArea.setPixelSize(300, 100);
@@ -114,9 +102,6 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 								transTable.setText(i, 1, "  -  ");
 
 								if(termsTranslated.length > i) transTable.setText(i, 2, termsTranslated[i]);
-								
-								// Download pronunciation HTML tags in case user wants them later
-								fetchPronunciationHTML(terms[i], detectedLanguage, i);
 							}
 
 							pronunciationButton.setVisible(true); // Activate pronunciation button
@@ -140,7 +125,7 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 			public void onClick(ClickEvent event) {
 				String[] terms = transArea.getText().split("\n");
 				for(int i = 0; i < terms.length; i++) {
-					transTable.setHTML(i, 3, pronunciation[i]);
+					fetchPronunciationHTML(terms[i], detectedLanguage, i);
 				}
 			}
 		});
@@ -190,6 +175,7 @@ public class Foreign_Language_Flash_Card_Generator implements EntryPoint {
 				String html = "";
 				if (!html.equals("java.lang.IllegalArgumentException")) html = result;
 				pronunciation[number] = html;
+				transTable.setHTML(number, 3, html);
 			}
 			
 		});

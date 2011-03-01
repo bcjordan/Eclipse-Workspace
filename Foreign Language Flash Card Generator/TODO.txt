@@ -3,11 +3,12 @@ have pronunciation download button, populate table.
 write stylesheet
 auto-choose language
 	from "fr" to Language.FRENCH
-	* fix pause
+* remove pronunciation button
+* add pronunciation checkbox
 make nice title
 make About page
-* deploy to appspot
-* email ming about:
+deploy to appspot
+email ming about:
  	    	URL url = new URL(forvoBaseURL + word + middle + languageCode);
 
 			DocumentBuilder builder = builderFactory.newDocumentBuilder();
