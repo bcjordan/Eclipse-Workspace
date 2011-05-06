@@ -3,7 +3,7 @@
 	
 /** Add random background to webpage */
 html {
-	background-image: url(http://randomimage.heroku.com/random.jpg);
+	/*background-image: url(http://randomimage.heroku.com/random.jpg);*/
 }
 	
 h1 {
