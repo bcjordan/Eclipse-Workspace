@@ -18,7 +18,7 @@ import android.util.Log;
 
 public class MyLocationListener implements LocationListener {
 	private StationFinder copyOfStationFinder;
-	private static final String PREFIX = "http://mbtamap.heroku.com/mapper/find_closest_stations.json?lat=";
+	private static final String PREFIX = "http://mbta-api.heroku.com/mapper/find_closest_stations.json?lat=";
 	private static final String MIDDLE = "&lon=";
 
 	public MyLocationListener(StationFinder f) {
@@ -79,7 +79,8 @@ public class MyLocationListener implements LocationListener {
 						}
 						
 						trainString = trainString.concat("\nThe next " + line + " Line train to " + trainObject.getString("stop_name").toUpperCase() +
-										   " heading " + direction + " is predicted to arrive at " + trainObject.getString("time"));
+										   " heading " + direction + " is predicted to arrive at " + trainObject.getString("time") + "; time remaining "+ 
+										   trainObject.getString("time_remaining"));
 					}
 				}
 				
