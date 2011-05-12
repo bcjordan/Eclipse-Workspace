@@ -46,7 +46,7 @@ public class StationFinder extends Activity
 		
 		// Initialize text view
 		tv = new TextView(this);
-		tv.setText("This works!");
+		tv.setText("This is only a test! Again");
 		tv.setHeight(18);
 		setContentView(tv);
     }
